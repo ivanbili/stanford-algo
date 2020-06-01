@@ -1,7 +1,8 @@
 #include<iostream>
 #include<fstream>
 #include <unordered_set>
-#include <unordered_map> 
+#include <unordered_map>
+#include <time.h>
 using namespace std;
 
 unordered_set<int>numbers;
@@ -9,6 +10,7 @@ unordered_map<int, int>leaders;
 
 void flattenChain(int start, int leader)
 {
+    //return; // uncomment to turn off flattening
     auto currIt = leaders.find(start);
     while (currIt != leaders.end())
     {
@@ -65,6 +67,7 @@ int main()
         leaders.insert(make_pair(curr_int, curr_int));        
     }
     InFile.close();
+    clock_t start = clock();
     for (auto i = numbers.begin(); i != numbers.end(); i++)
     {
         int curr_int = *i;
@@ -100,5 +103,7 @@ int main()
     for (auto i = numbers.begin(); i != numbers.end(); i++)
         leader_count.insert(getLeader(*i));
     std::cout << "Clusters: " << leader_count.size() << "\n";
+    clock_t end = clock();
+    cout << "Algorithm took " << double(end - start) / CLOCKS_PER_SEC << " seconds.\n";
     system("pause");
 }
