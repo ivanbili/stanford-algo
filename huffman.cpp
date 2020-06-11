@@ -6,9 +6,9 @@ using namespace std;
 
 struct TreeNode
 {
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode(TreeNode* l, TreeNode* r)
+    TreeNode * left;
+    TreeNode * right;
+    TreeNode(TreeNode * l, TreeNode * r)
         : left(l), right(r) {}
 };
 
@@ -16,7 +16,7 @@ struct MinHeapElement
 {
     int weight;
     TreeNode * letter;
-    MinHeapElement(int weight, TreeNode* letter)
+    MinHeapElement(int weight, TreeNode * letter)
         : weight(weight), letter(letter) {}
 };
 
@@ -39,7 +39,7 @@ int findMaxDepth(TreeNode * root)
     return 1 + (lDepth > rDepth ? lDepth : rDepth);
 }
 
-int findMinDepth(TreeNode* root)
+int findMinDepth(TreeNode * root)
 {
     if (root == NULL)
         return 0;
@@ -51,12 +51,12 @@ int findMinDepth(TreeNode* root)
 TreeNode * buildHuffmanTree(priority_queue<MinHeapElement> & min_heap)
 {
     int new_freq = min_heap.top().weight;
-    TreeNode* leftNode = min_heap.top().letter;
+    TreeNode * leftNode = min_heap.top().letter;
     min_heap.pop();
     new_freq += min_heap.top().weight;
-    TreeNode* rightNode = min_heap.top().letter;
+    TreeNode * rightNode = min_heap.top().letter;
     min_heap.pop();
-    TreeNode* newNode = new TreeNode(leftNode, rightNode);
+    TreeNode * newNode = new TreeNode(leftNode, rightNode);
     if (min_heap.empty())
         return newNode;
     min_heap.push(MinHeapElement(new_freq, newNode));
@@ -68,7 +68,6 @@ int main()
     priority_queue<MinHeapElement> min_heap;
     ifstream InFile;
     InFile.open("huffman.txt");
-    vector<int>numbers;
     int curr_int;
     InFile >> curr_int;
     const int num_letters = curr_int;
