@@ -25,11 +25,6 @@ bool operator<(const MinHeapElement& e1, const MinHeapElement& e2)
     return e1.weight > e2.weight;
 }
 
-bool ComparePairFirst(pair<int, int> a, pair<int, int> b)
-{
-    return true;
-}
-
 int findMaxDepth(TreeNode * root)
 {
     if (root == NULL)
