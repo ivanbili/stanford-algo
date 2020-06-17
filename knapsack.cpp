@@ -2,6 +2,7 @@
 #include<fstream>
 #include<vector>
 #include <unordered_map>
+#include <algorithm>
 #include <time.h>
 
 using namespace std;
@@ -10,6 +11,10 @@ struct Item
 {
     int value;
     int weight;
+    bool operator < (const Item& str) const
+    {
+        return (weight < str.weight);
+    }
 };
 
 int knapsackRecursive(vector<unordered_map<int, int>> & lookup, vector<Item>& items, int knapsack_size, int max_item)
@@ -37,6 +42,7 @@ int knapsackRecursive(vector<unordered_map<int, int>> & lookup, vector<Item>& it
 
 int knapsackLarge(vector<Item>& items, int knapsack_size)
 {
+    sort(items.begin(), items.end());
     vector<unordered_map<int, int>> lookup(knapsack_size+1);
     return knapsackRecursive(lookup, items, knapsack_size, items.size());
 }
@@ -80,8 +86,8 @@ int main()
 {
     vector<Item> items;
     ifstream InFile;
-    //InFile.open("knapsack1.txt"); // 2493893, 0.03s, 0.15s
-    InFile.open("knapsack_big.txt"); // 4243395, n/a, 2.29s
+    InFile.open("knapsack1.txt"); // 2493893, 0.03s, 0.14s
+    //InFile.open("knapsack_big.txt"); // 4243395, n/a, 1.78s
     int knapsack_size;
     InFile >> knapsack_size;
     int number_of_items;
@@ -100,3 +106,4 @@ int main()
     clock_t end = clock();
     cout << "Time: " << double(end - start) / CLOCKS_PER_SEC << " seconds.\n";
 }
+
