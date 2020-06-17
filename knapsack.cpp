@@ -37,12 +37,7 @@ int knapsackRecursive(vector<unordered_map<int, int>> & lookup, vector<Item>& it
 
 int knapsackLarge(vector<Item>& items, int knapsack_size)
 {
-    vector<unordered_map<int,int>> lookup;
-    for (int i = 0; i <= knapsack_size; i++)
-    {
-        unordered_map<int, int> map;
-        lookup.push_back(map);
-    }
+    vector<unordered_map<int, int>> lookup(knapsack_size+1);
     return knapsackRecursive(lookup, items, knapsack_size, items.size());
 }
 
@@ -86,7 +81,7 @@ int main()
     vector<Item> items;
     ifstream InFile;
     //InFile.open("knapsack1.txt"); // 2493893, 0.03s, 0.15s
-    InFile.open("knapsack_big.txt"); // 4243395, n/a, 3.38s
+    InFile.open("knapsack_big.txt"); // 4243395, n/a, 2.29s
     int knapsack_size;
     InFile >> knapsack_size;
     int number_of_items;
@@ -105,4 +100,3 @@ int main()
     clock_t end = clock();
     cout << "Time: " << double(end - start) / CLOCKS_PER_SEC << " seconds.\n";
 }
-
