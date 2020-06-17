@@ -11,9 +11,9 @@ struct Item
 {
     int value;
     int weight;
-    bool operator < (const Item& str) const
+    bool operator < (const Item& other) const
     {
-        return (weight < str.weight);
+        return (weight < other.weight);
     }
 };
 
@@ -21,9 +21,9 @@ int knapsackRecursive(vector<unordered_map<int, int>> & lookup, vector<Item>& it
 {
     if (max_item == 0)
         return 0;
-    auto got = lookup[max_item].find(knapsack_size);
-    if (got != lookup[max_item].end())
-        return got->second;
+    auto it = lookup[max_item].find(knapsack_size);
+    if (it != lookup[max_item].end())
+        return it->second;
     int result;
     int case1 = knapsackRecursive(lookup, items, knapsack_size, max_item - 1);
     int reduced_weight = knapsack_size - items[max_item - 1].weight;
