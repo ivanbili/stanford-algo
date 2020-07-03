@@ -80,7 +80,6 @@ int main()
         {
             if (!testBit(S, 0) || numBits[S] != m)
                 continue;
-
             for (uint_fast8_t j = 1; j < num_vertices; j++)
             {
                 if (!testBit(S, j))
@@ -92,7 +91,6 @@ int main()
                 {
                     if (!testBit(S, k) || k == j)
                         continue;
-
                     float prevDist = tspMat2d[k][removeJFromSIndex];
                     float KJDist = distMat2d[k][j];
                     float curr_value = prevDist + KJDist;
