@@ -4,8 +4,10 @@
 #include <vector>
 #include <limits>
 #include <time.h>
+#include <ppl.h>
 
 using namespace std;
+using namespace concurrency;
 
 static const int bitmasks[] = { 0x1,0x2,0x4,0x8,0x10,0x20,0x40,0x80,0x100,0x200,0x400,0x800,0x1000,0x2000,0x4000,0x8000,
                                 0x10000,0x20000,0x40000,0x80000,0x100000,0x200000,0x400000,0x800000,0x1000000,0x2000000,0x4000000,0x8000000,
@@ -76,30 +78,32 @@ int main()
         numBits[i] = countBits(i);
     for (uint_fast8_t m = 2; m <= num_vertices; m++)
     {
-        for (uint_fast32_t S = 0; S < sets; S++)
-        {
-            if (!testBit(S, 0) || numBits[S] != m)
-                continue;
-            for (uint_fast8_t j = 1; j < num_vertices; j++)
+        parallel_for(size_t(0), size_t(sets), [&](size_t S)
             {
-                if (!testBit(S, j))
-                    continue;
-                uint_fast32_t mask = ~(1 << j);
-                uint_fast32_t removeJFromSIndex = S & mask;
-                float min_value = numeric_limits<float>::max();
-                for (int k = 0; k < num_vertices; k++)
+                if (testBit(S, 0) && numBits[S] == m)
                 {
-                    if (!testBit(S, k) || k == j)
-                        continue;
-                    float prevDist = tspMat2d[k][removeJFromSIndex];
-                    float KJDist = distMat2d[k][j];
-                    float curr_value = prevDist + KJDist;
-                    if (curr_value < min_value)
-                        min_value = curr_value;
+                    for (uint_fast8_t j = 1; j < num_vertices; j++)
+                    {
+                        if (testBit(S, j))
+                        {
+                            uint_fast32_t mask = ~(1 << j);
+                            uint_fast32_t removeJFromSIndex = S & mask;
+                            float min_value = numeric_limits<float>::max();
+                            for (int k = 0; k < num_vertices; k++)
+                            {
+                                if (!testBit(S, k) || k == j)
+                                    continue;
+                                float prevDist = tspMat2d[k][removeJFromSIndex];
+                                float KJDist = distMat2d[k][j];
+                                float curr_value = prevDist + KJDist;
+                                if (curr_value < min_value)
+                                    min_value = curr_value;
+                            }
+                            tspMat2d[j][S] = min_value;
+                        }
+                    }
                 }
-                tspMat2d[j][S] = min_value;
-            }
-        }
+            });
     }
     float min_dist = numeric_limits<float>::max();
     for (uint_fast8_t j = 1; j < num_vertices; j++)
